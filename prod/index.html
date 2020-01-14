@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head><link href="main.css" rel="stylesheet"></head>
+  <body>
+    <div class="drawing-space-wrapper">
+    <sidebar draggable="true">
+      <p> press <span class="button">d</span> to toggle drawing <span><svg
+          xmlns="http://www.w3.org/2000/svg"
+          id="crayon-icon"
+          class="crayon-icon crayon-icon--drawing"
+        >
+          <path
+            d="m 6.7467974,2.8759994 c 0.03846,-0.03866 0.101089,-0.03866 0.139954,0 L 18.332387,14.306734 c 0.03866,0.03846 0.03866,0.100888 0,0.13935 l -3.86777,3.863139 c -0.01933,0.01913 -0.0447,0.0288 -0.07008,0.0288 -0.02517,0 -0.05055,-0.0097 -0.06988,-0.0288 L 2.8788254,6.8782874 c -0.01873,-0.01853 -0.0292,-0.0435 -0.0292,-0.06988 0,-0.02638 0.01047,-0.05135 0.0292,-0.06988 z" />
+          <path
+            d="m 1.1740024,2.4440544 1.272475,-1.270865 c 0.365291,-0.364686 0.851003,-0.565656 1.367726,-0.565656 0.51632,0 1.002233,0.20097 1.367322,0.565656 l 1.272476,1.270865 c 0.01873,0.01853 0.0292,0.0435 0.0292,0.06988 0,0.02618 -0.01047,0.05115 -0.0292,0.06967 l -3.867771,3.862736 c -0.01853,0.01853 -0.0439,0.029 -0.07008,0.029 -0.02638,0 -0.05135,-0.01047 -0.06968,-0.029 l -1.272475,-1.270865 c -0.365291,-0.364888 -0.566462,-0.849794 -0.566462,-1.365913 0,-0.515716 0.201171,-1.000622 0.566462,-1.36551 z" />
+          <path
+            d="m 18.590346,14.696995 c 0.02457,-0.02437 0.05961,-0.03464 0.09344,-0.02598 0.03363,0.0081 0.06041,0.03323 0.07068,0.06645 l 1.848604,5.879083 c 0.01107,0.03585 0.0012,0.07431 -0.02557,0.100284 -0.01893,0.01833 -0.0437,0.02799 -0.06887,0.02799 -0.01087,0 -0.02215,-0.0022 -0.03303,-0.0058 l -5.716374,-2.016179 c -0.03202,-0.01128 -0.05598,-0.03786 -0.06343,-0.07129 -0.0075,-0.03302 0.0024,-0.06786 0.02658,-0.09163 z" />
+        </svg></span>
+      </p>
+      <div class="select-box">
+        <label for="color">color</label>
+        <select id="color">
+          <option value="lime" selected>lime</option>
+          <option value="black">black</option>
+          <option value="red">red</option>
+          <option value="green">green</option>
+          <option value="blue">blue</option>
+          <option value="yellow">yellow</option>
+        </select>
+      </div>
+      <div class="select-box">
+        <label for="width">width</label>
+        <select id="width">
+          <option value="1">thin</option>
+          <option value="3" selected>medium</option>
+          <option value="5">thick</option>
+        </select>
+      </div>
+      <button id="clean-button">clean</button>
+    </sidebar>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        id="drawing-space"
+        x="0"
+        y="0"
+        preserveAspectRatio="xMidYMid meet"
+      ></svg>
+    </div>
+  <script type="text/javascript" src="bundle.js"></script></body>
+</html>
