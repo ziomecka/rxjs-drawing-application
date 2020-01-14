@@ -1,0 +1,13 @@
+@mixin button
+  padding: $padding
+  background: $background
+
+@mixin box
+  background: $background
+  border: $border-width solid $border-color
+  border-radius: $border-radius
+  padding: $padding
+
+@mixin box-draggable
+  -webkit-box-shadow: 2px 2px 4px 2px rgba(0,0,0,0.4)
+  box-shadow: 2px 2px 4px 2px rgba(0,0,0,0.4)

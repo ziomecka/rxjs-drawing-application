@@ -1,0 +1,43 @@
+$xs-margin: .5rem
+$xs-padding: .5rem
+
+select, button
+  @include box
+  @include button
+
+label, select, p
+  margin: $xs-margin 0
+  font-size: inherit
+
+$label-width: 60px
+
+label
+  width: $label-width
+
+select
+  width: calc(100% - #{$label-width})
+
+.select-box
+  display: flex
+  justify-content: space-between
+  align-items: center
+
+$font-weight: 800
+
+.button
+  display: inline-block
+  @include box
+  padding: $xs-padding $padding
+  text-transform: lowercase
+  font-weight: $font-weight
+
+span.button
+  border: none
+
+button#clean-button
+  padding: $xs-padding $padding
+  text-transform: lowercase
+  margin-top: 20px
+  font-size: inherit
+  &:hover
+    background-color: rgba(0,0,0, 0.1)

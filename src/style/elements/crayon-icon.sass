@@ -1,0 +1,33 @@
+$crayon-icon-width: 20px
+$crayon-icon-transition: .2s
+$crayon-stroke: white
+$crayon-stroke-width: 1px
+
+.crayon-icon
+  display: inline-block
+  position: absolute
+  top: 50%
+  right: 0
+  width: $crayon-icon-width
+  height: auto
+  max-height: $crayon-icon-width
+  transition: all $crayon-icon-transition
+  stroke: $crayon-stroke
+  stroke-width: $crayon-stroke-width
+  transform: scale(1, 1) translateY(-50%)
+
+.crayon-icon--drawing
+  opacity: 1
+
+$crayon-icon-top: calc(50% - 15px)
+$crayon-icon-opacity: .5
+
+.crayon-icon--not-drawing
+  opacity: $crayon-icon-opacity
+  top: $crayon-icon-top
+
+.crayon-icon--thick
+  transform: scale(1.2, 1.15) translateY(-50%)
+
+.crayon-icon--thin
+  transform: scale(0.8, 0.85) translateY(-50%)
