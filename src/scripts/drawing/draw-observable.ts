@@ -135,7 +135,7 @@ const path$ = applicationState$.pipe(
 /**
  * Observable, extracts mouse position from mouse move event
  */
-const mouseMove$ = fromEvent($drawingSpace, 'mousemove').pipe(
+const mouseMove$ = fromEvent($drawingSpace, 'touchmove').pipe(
   map(({ clientX, clientY }: MouseEvent) => ({ clientX, clientY })),
 );
 
