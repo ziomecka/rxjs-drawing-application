@@ -134,23 +134,24 @@ const path$ = applicationState$.pipe(
 
 /**
  * Observable, extracts mouse position from mouse move event
- * pairwise ensures that together with the current position the previous
- * position is emitted. As we have the previous mouse position there are no
- * holes in lines if the user changes the color or width while drawing
  */
 const mouseMove$ = fromEvent($drawingSpace, 'mousemove').pipe(
   map(({ clientX, clientY }: MouseEvent) => ({ clientX, clientY })),
-  pairwise(),
 );
 
 /**
  * Observable, extracts mouse position from mouse move event
  *
- * Here we take the isDrawing state and pipe it via mergeMap to get
+ * Here we take the isDrawing state and pipe it via switchMap to get
  * either mouse moves or empty objects
+ *
+ * pairwise ensures that together with the current position the previous
+ * position is emitted. As we have the previous mouse position there are no
+ * holes in lines if the user changes the color or width while drawing
  */
 const mouse$ = isDrawing$.pipe(
   switchMap(isDrawing => iif(() => isDrawing, mouseMove$, of([{}, {}]))),
+  pairwise(),
 );
 
 /**
