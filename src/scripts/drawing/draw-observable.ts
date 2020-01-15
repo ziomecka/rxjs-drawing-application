@@ -4,7 +4,6 @@ import {
   distinctUntilChanged,
   filter,
   map,
-  mergeMap,
   pairwise,
   scan,
   startWith,
@@ -151,7 +150,7 @@ const mouseMove$ = fromEvent($drawingSpace, 'mousemove').pipe(
  * either mouse moves or empty objects
  */
 const mouse$ = isDrawing$.pipe(
-  mergeMap(isDrawing => iif(() => isDrawing, mouseMove$, of([{}, {}]))),
+  switchMap(isDrawing => iif(() => isDrawing, mouseMove$, of([{}, {}]))),
 );
 
 /**
