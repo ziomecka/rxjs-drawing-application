@@ -1,24 +1,14 @@
-// 20 is CSS margin value of drawing space
-const adjust = (value: number) => value - 20;
-
 export const drawSubscriber = ([
-  path,
-  [
-    { clientX: prevClientX, clientY: prevClientY } = {
-      clientX: null,
-      clientY: null,
-    },
-    { clientX, clientY } = {
-      clientX: null,
-      clientY: null,
-    },
-  ],
+  [, prevPosition],
+  [path, currentPosition],
 ]: DrawSubscriberOptions) => {
-  if (!path || !clientX || !clientY) {
+  if (!path || !currentPosition) {
     return;
   }
-
   const currentDAttribute = path.getAttribute('d');
+
+  const { clientX: prevClientX, clientY: prevClientY } = Object(prevPosition);
+  const { clientX, clientY } = currentPosition;
 
   if (prevClientX && prevClientY) {
     path.setAttribute(
@@ -40,7 +30,9 @@ export const drawSubscriber = ([
   );
 };
 
-type DrawSubscriberOptions = [
-  SVGPathElement | null,
-  [MousePosition, MousePosition],
-];
+function adjust(value: number) {
+  // 20 is CSS margin value of drawing space
+  return value - 20;
+}
+
+type DrawSubscriberOptions = [SVGPathElement?, MousePosition?][];
