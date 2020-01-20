@@ -20,6 +20,7 @@ module.exports = {
     'no-duplicate-imports': 'error',
     'sort-imports': 'error',
     'max-len': ['error', 80],
+    'space-before-function-paren': ['error', 'never'],
     '@typescript-eslint/no-unused-vars': [
       'error',
       {
