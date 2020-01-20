@@ -1,11 +1,15 @@
 import { $drawingSpace, $sidebar, INITIAL_STATE } from '../consts';
-import { combineLatest, defer, fromEvent, iif, merge, of } from 'rxjs';
+import { Observable, combineLatest, fromEvent, merge, of } from 'rxjs';
 import {
   distinctUntilChanged,
   filter,
   map,
+  mapTo,
+  mergeMap,
   pairwise,
+  pluck,
   scan,
+  share,
   startWith,
   switchMap,
   tap,
@@ -19,62 +23,59 @@ import { createSvgPathElement } from './create-svg-path-element';
 const $color = document.querySelector('#color') as HTMLInputElement;
 const $width = document.querySelector('#width') as HTMLInputElement;
 
-const color$ = fromEvent($color, 'change').pipe(
-  map((event: InputEvent) => (event.target as HTMLInputElement).value),
+const color$ = fromEvent<Event>($color, 'change').pipe(
+  pluck<Event, string>('target', 'value'),
   startWith($color.value),
   distinctUntilChanged(),
 );
 
-const width$ = fromEvent($width, 'change').pipe(
-  map((event: InputEvent) => (event.target as HTMLInputElement).value),
+const width$ = fromEvent<Event>($width, 'change').pipe(
+  pluck<Event, string>('target', 'value'),
   startWith($width.value),
   distinctUntilChanged(),
 );
 
-export const pathAttributes$ = combineLatest(color$, width$).pipe(
+const pathAttributes$ = combineLatest(color$, width$).pipe(
   tap(modifyAttributesCrayonIcon),
 );
 
-const drawingButtonClick$ = fromEvent(document, 'keypress').pipe(
-  filter(({ key }: KeyboardEvent) => key === 'd'),
-  map(() => (value: boolean) => !value),
+const drawingStateToggler: DrawingStateModifier = value => !value;
+const drawingStateDisabler: DrawingStateModifier = () => false;
+
+const drawingButtonClick$ = fromEvent<KeyboardEvent>(document, 'keypress').pipe(
+  filter(({ key }) => key === 'd'),
+  mapTo(drawingStateToggler),
 );
 
-const sidebarDragStart$ = fromEvent($sidebar, 'dragstart').pipe(
-  map(() => () => false),
+const sidebarMouseDown$ = fromEvent($sidebar, 'mousedown').pipe(
+  mapTo(drawingStateDisabler),
 );
 
-const sidebarClick$ = fromEvent($sidebar, 'click').pipe(map(() => () => false));
-
-const isDrawing$ = merge(
-  drawingButtonClick$,
-  sidebarDragStart$,
-  sidebarClick$,
-).pipe(
-  scan(
-    (state, stateModifier: (value?: boolean) => boolean) =>
-      stateModifier(state),
-    INITIAL_STATE,
-  ),
-  startWith(INITIAL_STATE),
-  tap(modifyDrawingCrayonIcon),
+const isDrawing$ = merge(drawingButtonClick$, sidebarMouseDown$).pipe(
+  scan((state, stateModifier) => stateModifier(state), INITIAL_STATE),
   distinctUntilChanged(),
+  tap(modifyDrawingCrayonIcon),
+  share(),
+  startWith(INITIAL_STATE),
 );
 
-const mouseMove$ = fromEvent($drawingSpace, 'mousemove').pipe(
-  map(({ clientX, clientY }: MouseEvent) => ({ clientX, clientY })),
+const mouseMove$ = fromEvent<MouseEvent>($drawingSpace, 'mousemove').pipe(
+  map(({ clientX, clientY }) => ({ clientX, clientY })),
 );
 
-export const draw$ = combineLatest(isDrawing$, pathAttributes$).pipe(
-  switchMap(([isDrawing, pathAttributes]) =>
-    iif(
-      () => isDrawing,
-      combineLatest(
-        defer(() => of(createSvgPathElement(...pathAttributes))),
-        mouseMove$,
-      ),
-      combineLatest(of(null), of(null)),
-    ),
+export const mousePositions$ = isDrawing$.pipe(
+  switchMap<boolean, Observable<MousePosition>>(isDrawing =>
+    isDrawing ? mouseMove$ : of(null),
   ),
   pairwise(),
 );
+
+const path$ = combineLatest(isDrawing$, pathAttributes$).pipe(
+  map(value => value),
+  mergeMap(([isDrawing, pathAttributes]) =>
+    isDrawing ? of(createSvgPathElement(...pathAttributes)) : of(null),
+  ),
+  map(value => value),
+);
+
+export const draw$ = combineLatest(path$, mousePositions$);

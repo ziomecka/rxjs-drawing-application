@@ -1,10 +1,10 @@
-export const drawSubscriber = ([
-  [, prevPosition],
-  [path, currentPosition],
-]: DrawSubscriberOptions) => {
+export const drawSubscriber = (options: DrawSubscriberOptions) => {
+  const [path, [prevPosition, currentPosition]] = options;
+
   if (!path || !currentPosition) {
     return;
   }
+
   const currentDAttribute = path.getAttribute('d');
 
   const { clientX: prevClientX, clientY: prevClientY } = Object(prevPosition);
@@ -31,8 +31,8 @@ export const drawSubscriber = ([
 };
 
 function adjust(value: number) {
-  // 20 is CSS margin value of drawing space
+  // 20 is CSS margin of drawing space
   return value - 20;
 }
 
-type DrawSubscriberOptions = [SVGPathElement?, MousePosition?][];
+type DrawSubscriberOptions = [SVGPathElement, MousePositions];

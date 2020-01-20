@@ -4,7 +4,6 @@ import {
   menuDragEnd$,
   menuDragEndSubscriber,
 } from './other/';
-
 import { draw$, drawSubscriber } from './drawing/';
 
 require('../style/index.sass');
