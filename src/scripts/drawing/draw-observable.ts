@@ -71,8 +71,8 @@ export const mousePositions$ = isDrawing$.pipe(
 );
 
 const path$ = combineLatest(isDrawing$, pathAttributes$).pipe(
-  mergeMap(([isDrawing, pathAttributes]) =>
-    isDrawing ? of(createSvgPathElement(...pathAttributes)) : of(null),
+  map(([isDrawing, pathAttributes]) =>
+    isDrawing ? createSvgPathElement(...pathAttributes) : null,
   ),
 );
 
